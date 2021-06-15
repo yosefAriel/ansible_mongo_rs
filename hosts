@@ -43,13 +43,13 @@
 ## db-[99:101]-node.example.com
 
 [primary]
-13.74.182.159 ansible_user=ansible-client-1 ansible_become=true
+<ips || dns> ansible_user=<remote user name> ansible_become=true
 
 [allDB]
-13.74.182.159 ansible_user=ansible-client-1 ansible_become=true
-13.79.158.131 ansible_user=ansible-client-2 ansible_become=true
-137.135.217.130 ansible_user=ansible-client-3 ansible_become=true
+<ips || dns> ansible_user=<remote user name> ansible_become=true
+<ips || dns> ansible_user=<remote user name> ansible_become=true
+<ips || dns> ansible_user=<remote user name> ansible_become=true
 
 [secondary] 
-13.79.158.131 ansible_user=ansible-client-2 ansible_become=true
-137.135.217.130 ansible_user=ansible-client-3 ansible_become=true
+<ips || dns> ansible_user=<remote user name> ansible_become=true
+<ips || dns> ansible_user=<remote user name> ansible_become=true
