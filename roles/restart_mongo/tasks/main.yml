@@ -1,0 +1,14 @@
+---
+
+- name: copy mongod.conf
+  copy: src=mongod.conf dest=/etc/mongod.conf
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+
+- name: restart mongo
+  shell: service mongod restart
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+- name: Pause for 20 seconds to build app cache
+  pause:
+    seconds: 20

@@ -1,0 +1,15 @@
+---
+
+- name: Pause for 20 seconds to build app cache
+  pause:
+    seconds: 20
+
+- name: Define user root roles
+  community.mongodb.mongodb_user:
+    database: admin
+    name: "{{ root_user['name'] }}" 
+    password: "{{ root_user['password'] }}"
+    roles: root
+    state: present
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+

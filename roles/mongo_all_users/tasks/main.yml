@@ -1,0 +1,27 @@
+---
+
+- name: Create MongoDB administrative user siteUserAdmin
+  mongodb_user:
+    login_user: "{{ root_user['name'] }}" 
+    login_password: "{{ root_user['password'] }}" 
+    login_port: "27017"
+    database: "admin"
+    name: "{{ admin_user['name'] }}"
+    password: "{{ admin_user['password'] }}" 
+    roles:
+      - { db: "admin", role: "userAdminAnyDatabase" }
+      - { db: "admin", role: "readWriteAnyDatabase" }
+
+
+
+- name: Create mongodb user with read and write permission
+  mongodb_user:
+    login_user: "{{ root_user['name'] }}" 
+    login_password: "{{ root_user['password'] }}" 
+    login_port: "27017"
+    database: "{{ simple_user['database'] }}"
+    name: "{{ simple_user['name'] }}"
+    password: "{{ simple_user['password'] }}" 
+    roles:
+      - { db: "{{ simple_user['database'] }}", role: "readWrite" }
+      # - { db: "{{ mongodb_database }}", role: "readWrite" }

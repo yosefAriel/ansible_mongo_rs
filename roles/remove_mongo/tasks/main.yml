@@ -1,0 +1,10 @@
+---
+
+- name: remove mongo 
+  shell: "{{ item }}"
+  with_items:
+    - systemctl stop mongod
+    - apt-get purge mongodb-org* -y
+    - rm -r /var/log/mongodb
+    - rm -r /var/lib/mongodb
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'

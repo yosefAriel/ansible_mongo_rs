@@ -1,0 +1,7 @@
+---
+- name: remove mongo db  
+  hosts: allDB
+  become: yes
+#  remote_user: ansible-client-1
+  roles:
+    - remove_mongo

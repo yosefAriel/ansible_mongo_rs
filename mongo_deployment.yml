@@ -1,0 +1,50 @@
+---
+# This playbook deploys mongodb replica_set on three machines
+- name: create keyfile on local host 
+  hosts: 127.0.0.1
+  connection: local
+  tasks:
+    - name: Create a secret keyfile 
+      shell: openssl rand -base64 756 > ./roles/ubuntu18/files/keyfile.txt
+
+- name: apply common configuration to all nodes
+  hosts: allDB
+  become: yes
+  roles:
+    - ubuntu18
+
+
+- name: create mongo_rs and users
+  hosts: primary
+  become: yes
+  roles:
+    - rs_mongoDB
+
+
+- name: create mongo users
+  hosts: primary
+  become: yes
+  roles:
+    - mongo_user
+
+
+- name: restart all mongos instancces to apply auotentication enabled
+  hosts: primary
+  become: yes
+  roles:
+    - restart_mongo
+
+- name: restart all mongos instancces to apply auotentication enabled
+  hosts: secondary
+  become: yes
+
+  roles:
+    - restart_mongo
+
+- name: create all users
+  hosts: primary
+  become: yes
+
+  roles:
+    - mongo_all_users
+

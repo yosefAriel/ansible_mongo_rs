@@ -1,0 +1,19 @@
+host_1: <ip || dns>
+host_2: <ip || dns>
+host_3: <ip || dns>
+
+rs_name: <replica_set name>
+
+
+root_user:
+  name: <root user name>
+  password: <root user password>
+
+admin_user:
+  name: <admin_user name>
+  password: <admin_user password>
+
+simple_user:
+  name: <simple_user name>
+  password: <simple_user password>
+  database: <db name>

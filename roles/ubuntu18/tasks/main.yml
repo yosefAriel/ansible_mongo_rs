@@ -1,0 +1,103 @@
+--- 
+
+- name: Create mongo_dependency directory
+  ansible.builtin.file:
+    path: mongo_dependency
+    state: directory
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+  
+- name: copy mongo dependency 
+  copy: src="{{ item }}" dest=mongo_dependency
+  with_items:
+    - libcurl4_7.58.0-2ubuntu3.13_amd64.deb
+    - liblzma5_5.2.5-2_amd64.deb
+    - openssl_1.1.1k-1_amd64.deb
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+- name: insatll mongo dependency 
+  shell: dpkg -i mongo_dependency/"{{ item }}"
+  with_items:
+    - libcurl4_7.58.0-2ubuntu3.13_amd64.deb
+    - openssl_1.1.1k-1_amd64.deb
+    - liblzma5_5.2.5-2_amd64.deb
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'   
+
+- name: Create mongodb directory
+  ansible.builtin.file:
+    path: mongodb
+    state: directory
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+
+- name: Create mongodb directory
+  ansible.builtin.file:
+    path: mongodb/mongodb_bin
+    state: directory
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+
+- name: copy mongodb ubuntu 18.04 
+  copy: src="{{ item }}" dest=mongodb/ 
+  with_items:
+    - mongodb-org-mongos_4.4.6_amd64.deb
+    - mongodb-org-server_4.4.6_amd64.deb
+    - mongodb-org-shell_4.4.6_amd64.deb
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+
+- name: insatll mongo shell mongos  and server 
+  shell: dpkg -i mongodb/"{{ item }}"
+  with_items:
+    - mongodb-org-mongos_4.4.6_amd64.deb
+    - mongodb-org-server_4.4.6_amd64.deb
+    - mongodb-org-shell_4.4.6_amd64.deb
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+
+- name: Create the data and log directories
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+  with_items:
+    - /var/lib/mongo 
+    - /var/log/mongodb
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+
+
+- name: set user as owner to mongo files
+  shell: chown -R mongodb:mongodb "{{ item }}"
+  with_items:
+    - /var/log/mongodb
+    - /var/lib/mongo
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+
+- name: Remove hold keyfile
+  ansible.builtin.file:
+    path: /keyfile.txt
+    state: absent
+
+- name: copy secret keyfile 
+  copy: src=keyfile.txt dest=/keyfile.txt
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+- name: change mode
+  ansible.builtin.shell: chown -R mongodb:mongodb /keyfile.txt
+
+- name: change mode
+  ansible.builtin.shell: chmod 400 /keyfile.txt
+
+
+- name: copy mongod.conf
+  copy: src=mongod.conf dest=/etc/mongod.conf
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+
+- name: restart mongo 
+  shell: service mongod restart
+  when: ansible_distribution == 'Ubuntu' and ansible_lsb.release == '18.04'
+
+- name: Pause for 5 minutes to build app cache
+  pause:
+    seconds: 20  
